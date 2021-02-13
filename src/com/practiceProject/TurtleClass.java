@@ -16,37 +16,47 @@ public class TurtleClass implements Turtle{
 
     @Override
     public void draw() {
-
+        move();
+        // + tracer
     }
 
     @Override
     public void move() {
-
+        Point2D point2D = getPosition();
+        double x = point2D.getX();
+        double y = point2D.getY();
+        x += s * Math.cos(Math.toRadians(getAngle()));
+        y += s * Math.sin(Math.toRadians(getAngle()));
+        state.setPosition(x,y);
     }
 
     @Override
     public void turnR() {
-        //angle -= d;
+        double angle = getAngle();
+        angle -= d;
+        state.setAngle(angle);
     }
 
     @Override
     public void turnL() {
-       // angle += d;
+        double angle = getAngle();
+        angle += d;
+        state.setAngle(angle);
     }
 
     @Override
     public void push() {
-
+        stateStack.push(state);
     }
 
     @Override
     public void pop() {
-
+        stateStack.pop();
     }
 
     @Override
     public void stay() {
-
+        // Not sure ?
     }
 
     @Override
