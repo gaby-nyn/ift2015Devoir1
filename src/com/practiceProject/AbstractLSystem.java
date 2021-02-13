@@ -1,4 +1,6 @@
 package com.practiceProject;
+import com.practiceProject.Interface.Turtle;
+
 import java.awt.geom.Rectangle2D;
 
 public abstract class AbstractLSystem {

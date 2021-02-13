@@ -1,4 +1,4 @@
-package com.practiceProject;
+package com.practiceProject.Model;
 
 import java.awt.geom.Point2D;
 

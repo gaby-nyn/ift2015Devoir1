@@ -1,9 +1,12 @@
 package com.practiceProject;
 
+import com.practiceProject.Interface.Turtle;
+import com.practiceProject.Model.State;
+
 import java.awt.geom.Point2D;
 import java.util.Stack;
 
-public class TurtleClass implements Turtle{
+public class TurtleClass implements Turtle {
     // step : length of an advance (move or draw)
     // delta : unit angle change in degrees (for turnR and turnL)
     double s, d;
