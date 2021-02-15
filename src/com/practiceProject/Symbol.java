@@ -23,11 +23,8 @@ public class Symbol {
 
         @Override
         Iterator<Symbol> iterator();
-
         void add(Symbol data);
         void getString(String s);
-        Symbol getHead();
-        Symbol getTail();
-
+        List<Symbol.Seq> getList();
     }
 }
