@@ -10,6 +10,7 @@ public abstract class AbstractLSystem {
      * @return the corresponding {@link Symbol} in the alphabet
      */
     public abstract Symbol addSymbol(char sym) ;
+
     /**
      * Adds a new rule to the grammar. This method is called while parsing the input.
      * Symbols on the right-hand side are encoded by
@@ -20,6 +21,7 @@ public abstract class AbstractLSystem {
      * @param expansion sequence on right-hand side
      */
     public abstract void addRule(Symbol sym, String expansion);
+
     /**
      * Associates a turtle action with a symbol. This method is called while parsing the input.
      * The action must correspond to one of the methods in {@link Turtle}: {@link Turtle#draw() }, {@link Turtle#move() },

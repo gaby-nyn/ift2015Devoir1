@@ -1,4 +1,6 @@
 package com.practiceProject;
+import java.util.Iterator;
+import java.util.List;
 
 public class Symbol {
     private final char value;
@@ -17,6 +19,15 @@ public class Symbol {
      * Common interface to a string of symbols.
      *
      */
-    public interface Seq extends Iterable<Symbol>
-    {}
+    public interface Seq extends Iterable<Symbol> {
+
+        @Override
+        Iterator<Symbol> iterator();
+
+        void add(Symbol data);
+        void getString(String s);
+        Symbol getHead();
+        Symbol getTail();
+
+    }
 }
