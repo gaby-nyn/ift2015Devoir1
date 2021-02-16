@@ -4,23 +4,26 @@ import java.util.*;
 
 public class Sequence implements Symbol.Seq {
 
-    private String expansion;
+    private String sequence;
+
+    public Sequence(String sequence){
+        this.sequence = sequence;
+    }
 
     @Override
     public Iterator<Symbol> iterator() {
 
         List<Symbol> listeSequence = new LinkedList<>();
-        char[] symbolsInExpansion = new char[expansion.length()];
+        char[] symbolsInSequence;
         Iterator<Symbol> iterator;
 
-        if(expansion.isEmpty()) {
+        if(sequence.isEmpty()) {
             return null;
         }
 
-        for(int i = 0; i < expansion.length(); i++) {
-
-            symbolsInExpansion = expansion.toCharArray();
-            listeSequence.add(new Symbol(symbolsInExpansion[i]));
+        for(int i = 0; i < sequence.length(); i++) {
+            symbolsInSequence = sequence.toCharArray();
+            listeSequence.add(new Symbol(symbolsInSequence[i]));
         }
         iterator = listeSequence.iterator();
         return iterator;
@@ -36,11 +39,6 @@ public class Sequence implements Symbol.Seq {
         List<Symbol.Seq> returnedList = new LinkedList<>();
         returnedList.add(this);
         return returnedList;
-    }
-
-    @Override
-    public void getString(String s) {
-        expansion = s;
     }
 
 }

@@ -8,11 +8,14 @@ public class LSystem extends AbstractLSystem{
     //Variables dans LSystem
     private Map<Character, Symbol> alphabet;
     private Map<Symbol,List<Symbol.Seq>> rules;
+    private Map<Symbol,String> actions;
+    private Sequence axiom;
 
     //Initialisation du LSystem
     public LSystem() {
         alphabet = new HashMap<>();
         rules = new HashMap<>();
+        actions = new HashMap<>();
     }
 
     //Méthode pour ajouter un symbole dans alphabet du système
@@ -23,29 +26,31 @@ public class LSystem extends AbstractLSystem{
         return symbol;
     }
 
-
+    //Méthode pour ajouter une règle associer à un symbole
     @Override
     public void addRule(Symbol sym, String expansion) {
-        Sequence sequence = new Sequence();
-        sequence.getString(expansion);
-        List<Symbol.Seq> symbolRule = new LinkedList<>();
+        Sequence sequence = new Sequence(expansion);
+        List<Symbol.Seq> symbolRule;
         symbolRule = sequence.getList();
         rules.put(sym, symbolRule);
     }
 
+    //Méthode pour ajouter les actions
     @Override
     public void setAction(Symbol sym, String action) {
-
+        actions.put(sym,action);
     }
 
+    //Méthode pour définir axiome
     @Override
     public void setAxiom(String str) {
-
+        this.axiom = new Sequence(str);
     }
 
+    //Méthode pour prendre valeur d'axiome
     @Override
     public Symbol.Seq getAxiom() {
-        return null;
+        return this.axiom;
     }
 
     @Override
