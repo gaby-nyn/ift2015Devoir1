@@ -63,7 +63,7 @@ public abstract class AbstractLSystem {
      * @param turtle used for executing the action
      * @param seq sequence that needs to be executed
      */
-    public abstract void tell(Turtle turtle, Symbol.Seq seq);
+    public abstract void tell(Turtle turtle, Symbol sym);
 
     /**
      * Calculates the result of multiple rounds of rewriting. Symbols with no reriting rules are simply copied

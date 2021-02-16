@@ -50,19 +50,28 @@ public class LSystem extends AbstractLSystem{
         this.axiom = new Sequence(str);
     }
 
-    //Méthode pour prendre valeur d'axiome
+    //Méthode qui retourne valeur d'axiome
     @Override
     public Symbol.Seq getAxiom() {
         return this.axiom;
     }
 
+    //Méthode qui retourne règle aléatoire
     @Override
     public Symbol.Seq rewrite(Symbol sym) {
-        return null;
+        List<Symbol.Seq> symbolRule = this.rules.get(sym);
+        int indexRandomRule = (int) Math.random() * (symbolRule.size()-1);
+        if(symbolRule == null) {
+            return null;
+        }
+        else if (symbolRule.size() == 1) {
+            return symbolRule.get(0);
+        }
+        return symbolRule.get(indexRandomRule);
     }
 
     @Override
-    public void tell(Turtle turtle, Symbol.Seq seq) {
+    public void tell(Turtle turtle, Symbol sym) {
 
     }
 
