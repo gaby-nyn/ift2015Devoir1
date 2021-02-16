@@ -29,10 +29,13 @@ public class LSystem extends AbstractLSystem{
     //Méthode pour ajouter une règle associer à un symbole
     @Override
     public void addRule(Symbol sym, String expansion) {
-        Sequence sequence = new Sequence(expansion);
-        List<Symbol.Seq> symbolRule;
-        symbolRule = sequence.getList();
-        rules.put(sym, symbolRule);
+        Symbol.Seq sequence = new Sequence(expansion);
+        List<Symbol.Seq> symbolRule = this.rules.get(sym);
+        if(symbolRule == null) {
+            symbolRule = new LinkedList<>();
+            this.rules.put(sym, symbolRule);
+        }
+        symbolRule.add(sequence);
     }
 
     //Méthode pour ajouter les actions

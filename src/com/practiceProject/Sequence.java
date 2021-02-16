@@ -29,16 +29,4 @@ public class Sequence implements Symbol.Seq {
         return iterator;
     }
 
-    @Override
-    public void add(Symbol data) {
-
-    }
-
-    @Override
-    public List<Symbol.Seq> getList() {
-        List<Symbol.Seq> returnedList = new LinkedList<>();
-        returnedList.add(this);
-        return returnedList;
-    }
-
 }

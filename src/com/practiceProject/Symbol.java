@@ -23,7 +23,5 @@ public class Symbol {
 
         @Override
         Iterator<Symbol> iterator();
-        void add(Symbol data);
-        List<Symbol.Seq> getList();
     }
 }
