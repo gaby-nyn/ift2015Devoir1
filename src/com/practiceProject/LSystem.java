@@ -60,7 +60,7 @@ public class LSystem extends AbstractLSystem{
     @Override
     public Symbol.Seq rewrite(Symbol sym) {
         List<Symbol.Seq> symbolRule = this.rules.get(sym);
-        int indexRandomRule = (int) Math.random() * (symbolRule.size()-1);
+        int indexRandomRule = (int) (Math.random() * (symbolRule.size()-1));
         if(symbolRule == null) {
             return null;
         }
@@ -70,9 +70,28 @@ public class LSystem extends AbstractLSystem{
         return symbolRule.get(indexRandomRule);
     }
 
+    //Méthode qui dit à la tortue quelle action exécuter
     @Override
     public void tell(Turtle turtle, Symbol sym) {
-
+        String action = this.actions.get(sym);
+        //À modifier selon actions de tortues
+        switch (action) {
+            case "draw":
+                turtle.draw();
+                break;
+            case "move":
+                turtle.move();
+                break;
+            case "push":
+                turtle.push();
+                break;
+            case "pop":
+                turtle.pop();
+            case "turnL":
+                turtle.turnL();
+            case "turnR":
+                turtle.turnR();
+        }
     }
 
     @Override
