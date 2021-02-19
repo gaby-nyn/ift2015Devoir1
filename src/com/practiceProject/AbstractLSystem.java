@@ -10,6 +10,7 @@ public abstract class AbstractLSystem {
      * @return the corresponding {@link Symbol} in the alphabet
      */
     public abstract Symbol addSymbol(char sym) ;
+
     /**
      * Adds a new rule to the grammar. This method is called while parsing the input.
      * Symbols on the right-hand side are encoded by
@@ -20,6 +21,7 @@ public abstract class AbstractLSystem {
      * @param expansion sequence on right-hand side
      */
     public abstract void addRule(Symbol sym, String expansion);
+
     /**
      * Associates a turtle action with a symbol. This method is called while parsing the input.
      * The action must correspond to one of the methods in {@link Turtle}: {@link Turtle#draw() }, {@link Turtle#move() },
@@ -59,12 +61,12 @@ public abstract class AbstractLSystem {
      * Executes the action corresponding to a sequence (actions for Symbols specified by {@link #setAction}) on a given turtle.
      *
      * @param turtle used for executing the action
-     * @param seq sequence that needs to be executed
+     * @param sym action that needs to be executed
      */
-    public abstract void tell(Turtle turtle, Symbol.Seq seq);
+    public abstract void tell(Turtle turtle, Symbol sym);
 
     /**
-     * Calculates the result of multiple rounds of rewriting. Symbols with no reriting rules are simply copied
+     * Calculates the result of multiple rounds of rewriting. Symbols with no rewriting rules are simply copied
      * at each round.
      *
      * @param seq starting sequence
