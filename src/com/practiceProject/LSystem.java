@@ -1,7 +1,10 @@
 package com.practiceProject;
 
 import java.awt.geom.Rectangle2D;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.*;
+import org.json.*;
 
 public class LSystem extends AbstractLSystem{
 
@@ -11,8 +14,9 @@ public class LSystem extends AbstractLSystem{
     private Map<Symbol,String> actions;
     private Sequence axiom;
 
+
     //Initialisation du LSystem
-    public LSystem() {
+    private LSystem() {
         alphabet = new HashMap<>();
         rules = new HashMap<>();
         actions = new HashMap<>();
@@ -87,10 +91,13 @@ public class LSystem extends AbstractLSystem{
                 break;
             case "pop":
                 turtle.pop();
+                break;
             case "turnL":
                 turtle.turnL();
+                break;
             case "turnR":
                 turtle.turnR();
+                break;
         }
     }
 
@@ -102,5 +109,45 @@ public class LSystem extends AbstractLSystem{
     @Override
     public Rectangle2D tell(Turtle turtle, Symbol sym, int rounds) {
         return null;
+    }
+
+    public static LSystem getLSystemFromJsonFile(String file) throws FileNotFoundException {
+        LSystem system = new LSystem();
+        JSONObject input = new JSONObject(new JSONTokener(new FileReader(file)));
+
+        //Initialize system axiom
+        String axiom = input.getString("axiom");
+        system.setAxiom(axiom);
+
+        //Initialize system alphabet
+        JSONArray alphabet = input.getJSONArray("alphabet");
+        for (int i = 0; i < alphabet.length(); i++) {
+            String letter = alphabet.getString(i);
+            system.addSymbol(letter.charAt(0));
+        }
+
+        //Initialize system rules
+        JSONObject rules = input.getJSONObject("rules");
+        for (char key : system.alphabet.keySet()) {
+            Symbol symbol = system.alphabet.get(key);
+            JSONArray rulesArray = rules.getJSONArray(String.valueOf(key));
+            if(rulesArray != null) {
+                for (int i = 0; i < rulesArray.length(); i++) {
+                    String rule = rulesArray.getString(i);
+                    system.addRule(symbol, rule);
+                }
+            }
+        }
+
+        //Initialize system actions
+        JSONObject actions = input.getJSONObject("actions");
+        for (char key : system.alphabet.keySet()) {
+            Symbol symbol = system.alphabet.get(key);
+            String action = actions.getString(String.valueOf(key));
+            system.setAction(symbol, action);
+        }
+
+        //TODO: GET INPUT TURTLE, GET PARAMETERS THAT WILL INITIALIZE THE TURTLE
+        return system;
     }
 }
