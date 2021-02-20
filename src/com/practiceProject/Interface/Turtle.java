@@ -1,4 +1,4 @@
-package com.practiceProject;
+package com.practiceProject.Interface;
 import java.awt.geom.Point2D;
 
 public interface Turtle {
