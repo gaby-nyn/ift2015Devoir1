@@ -108,16 +108,28 @@ public class LSystem extends AbstractLSystem{
         }
     }
 
+    //Method that applies rules to rounds of rewriting
     @Override
     public Symbol.Seq applyRules(Symbol.Seq seq, int n) {
-        return null;
+        Sequence returnedSequence;
+        Iterator<Symbol> iterator = axiom.iterator();
+        returnedSequence = (Sequence) iterateSequence(iterator);
+        iterator = seq.iterator();
+        for(int i = 0; i < n; i++) {
+            Sequence iteratedSequence = (Sequence) iterateSequence(iterator);
+            for(String s : iteratedSequence.getSequenceList()){
+                returnedSequence.addSequence(s);
+            }
+        }
+        return returnedSequence;
     }
 
     @Override
-    public Rectangle2D tell(Turtle turtle, Symbol sym, int rounds) {
+    public Rectangle2D tell(Turtle turtle, Symbol.Seq seq, int rounds) {
         return null;
     }
 
+    //Method that reads JSON file and assigns data where they have to go (INIT)
     public static LSystem readJsonFile(String file, Turtle turtle) throws FileNotFoundException {
         LSystem system = new LSystem();
         JSONObject input = new JSONObject(new JSONTokener(new FileReader(file)));
@@ -163,5 +175,35 @@ public class LSystem extends AbstractLSystem{
         turtle.init(point, angle);
 
         return system;
+    }
+
+    //Method that iterates through iterator given
+    public Symbol.Seq iterateSequence(Iterator<Symbol> iterator) {
+        Sequence returnedSequence = null;
+        while(iterator.hasNext()) {
+            Sequence rewrittenSequence;
+            if(returnedSequence.equals(null)) {
+                if(rewrite(iterator.next()).equals(null)) {
+                    returnedSequence = new Sequence(iterator.next().toString());
+                }
+                else {
+                    returnedSequence = (Sequence) rewrite(iterator.next());
+                }
+            }
+            else{
+                if(rewrite(iterator.next()).equals(null)) {
+                    returnedSequence = new Sequence(iterator.next().toString());
+                }
+                else {
+                    rewrittenSequence = (Sequence) rewrite(iterator.next());
+                    for(String s : rewrittenSequence.getSequenceList()){
+                        returnedSequence.addSequence(s);
+                    }
+                }
+
+
+            }
+        }
+        return returnedSequence;
     }
 }

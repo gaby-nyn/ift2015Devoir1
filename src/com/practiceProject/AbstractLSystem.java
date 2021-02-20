@@ -87,5 +87,5 @@ public abstract class AbstractLSystem {
      * @param rounds number of rounds
      * @return bounding box (minimal rectangle covering all visited turtle positions)
      */
-    public abstract Rectangle2D tell(Turtle turtle, Symbol sym, int rounds);
+    public abstract Rectangle2D tell(Turtle turtle, Symbol.Seq seq, int rounds);
 }
