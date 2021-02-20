@@ -6,10 +6,11 @@ import com.practiceProject.Model.State;
 import java.awt.geom.Point2D;
 import java.util.Stack;
 
-public class TurtleClass implements Turtle {
+public class TurtleImpl implements Turtle {
     // step : length of an advance (move or draw)
     // delta : unit angle change in degrees (for turnR and turnL)
-    double s, d;
+    double step;
+    double delta;
 
     //  State (x,y,θ)
     State state;
@@ -28,22 +29,22 @@ public class TurtleClass implements Turtle {
         Point2D point2D = getPosition();
         double x = point2D.getX();
         double y = point2D.getY();
-        x += s * Math.cos(Math.toRadians(getAngle()));
-        y += s * Math.sin(Math.toRadians(getAngle()));
+        x += step * Math.cos(Math.toRadians(getAngle()));
+        y += step * Math.sin(Math.toRadians(getAngle()));
         state.setPosition(x,y);
     }
 
     @Override
     public void turnR() {
         double angle = getAngle();
-        angle -= d;
+        angle -= delta;
         state.setAngle(angle);
     }
 
     @Override
     public void turnL() {
         double angle = getAngle();
-        angle += d;
+        angle += delta;
         state.setAngle(angle);
     }
 
@@ -79,7 +80,7 @@ public class TurtleClass implements Turtle {
 
     @Override
     public void setUnits(double step, double delta) {
-        s = step;
-        d = delta;
+        this.step = step;
+        this.delta = delta;
     }
 }
