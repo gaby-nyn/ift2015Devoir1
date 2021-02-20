@@ -111,7 +111,7 @@ public class LSystem extends AbstractLSystem{
         return null;
     }
 
-    public static LSystem getLSystemFromJsonFile(String file) throws FileNotFoundException {
+    public static LSystem readJsonFile(String file, Turtle turtle) throws FileNotFoundException {
         LSystem system = new LSystem();
         JSONObject input = new JSONObject(new JSONTokener(new FileReader(file)));
 
@@ -148,6 +148,11 @@ public class LSystem extends AbstractLSystem{
         }
 
         //TODO: GET INPUT TURTLE, GET PARAMETERS THAT WILL INITIALIZE THE TURTLE
+        //Initialize turtle for L-System
+        JSONObject parameters = input.getJSONObject("parameters");
+        //turtle.setUnits(parameters.getDouble("step"), parameters.getDouble("angle"));            TO BE CHANGED IF NEEDED
+        //line for setting turtle start point
+
         return system;
     }
 }
