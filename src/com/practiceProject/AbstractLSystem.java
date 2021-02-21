@@ -83,7 +83,7 @@ public abstract class AbstractLSystem {
      * at each round.
      *
      * @param turtle turtle used for drawing
-     * @param sym the starting sequence in round 0: a single symbol
+     * @param seq the starting sequence in round 0: a single symbol
      * @param rounds number of rounds
      * @return bounding box (minimal rectangle covering all visited turtle positions)
      */

@@ -126,7 +126,50 @@ public class LSystem extends AbstractLSystem{
 
     @Override
     public Rectangle2D tell(Turtle turtle, Symbol.Seq seq, int rounds) {
-        return null;
+        Sequence sequence;
+        Iterator<Symbol> iterator;
+        Rectangle2D returnedRectangle;
+        TurtleImpl turtleImplemented = (TurtleImpl) turtle;
+        Stack<State> stateStack;
+        double minX = 0;
+        double maxX = 0;
+        double minY = 0;
+        double maxY = 0;
+
+        //If no rounds of rewriting, just
+        if(rounds == 0) {
+            sequence = (Sequence) seq;
+            iterator = sequence.iterator();
+            while(iterator.hasNext()) {
+                tell(turtle, iterator.next());
+            }
+            stateStack = turtleImplemented.getStateStack();
+            for(State state : stateStack) {
+                if(maxX < state.getPosition().getX()) {
+                    maxX = state.getPosition().getX();
+                }
+                else if(maxX > state.getPosition().getX() && minX < state.getPosition().getX()) {
+                    minX = state.getPosition().getX();
+                }
+                if(maxY < state.getPosition().getY()) {
+                    maxY = state.getPosition().getY();
+                }
+                else if(maxY > state.getPosition().getY() && minY < state.getPosition().getY()) {
+                    minY = state.getPosition().getY();
+                }
+            }
+            returnedRectangle = new Rectangle2D.Double(stateStack.get(0).getPosition().getX(), stateStack.get(0).getPosition().getY(), maxX-minX, maxY-minY);
+        }
+        else {
+            sequence = (Sequence) applyRules(seq, rounds);
+            iterator = sequence.iterator();
+            while(iterator.hasNext()) {
+                tell(turtle, iterator.next());
+            }
+            returnedRectangle = tell(turtle, seq, rounds-1);
+        }
+
+        return returnedRectangle;
     }
 
     //Method that reads JSON file and assigns data where they have to go (INIT)
@@ -190,7 +233,7 @@ public class LSystem extends AbstractLSystem{
                     returnedSequence = (Sequence) rewrite(iterator.next());
                 }
             }
-            else{
+            else {
                 if(rewrite(iterator.next()).equals(null)) {
                     returnedSequence = new Sequence(iterator.next().toString());
                 }
@@ -200,8 +243,6 @@ public class LSystem extends AbstractLSystem{
                         returnedSequence.addSequence(s);
                     }
                 }
-
-
             }
         }
         return returnedSequence;

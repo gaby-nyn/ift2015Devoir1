@@ -9,14 +9,14 @@ import java.util.Stack;
 public class TurtleImpl implements Turtle {
     // step : length of an advance (move or draw)
     // delta : unit angle change in degrees (for turnR and turnL)
-    double step;
-    double delta;
+    private double step;
+    private double delta;
 
     //  State (x,y,θ)
-    State state;
+    private State state;
 
     // StateStack position & angle
-    Stack<State> stateStack = new Stack<>();
+    private Stack<State> stateStack = new Stack<>();
 
     @Override
     public void draw() {
@@ -82,5 +82,9 @@ public class TurtleImpl implements Turtle {
     public void setUnits(double step, double delta) {
         this.step = step;
         this.delta = delta;
+    }
+
+    public Stack<State> getStateStack(){
+        return stateStack;
     }
 }
