@@ -173,10 +173,10 @@ public class LSystem extends AbstractLSystem{
     }
 
     //Method that reads JSON file and assigns data where they have to go (INIT)
-    public static LSystem readJsonFile(String file, Turtle turtle) throws FileNotFoundException {
+    public static LSystem readJsonFile(JSONObject file, Turtle turtle) throws FileNotFoundException {
         LSystem system = new LSystem();
-        JSONObject input = new JSONObject(new JSONTokener(new FileReader(file)));
-
+        //JSONObject input = new JSONObject(new JSONTokener(FileReader(file)));
+        JSONObject input = file;
         //Initialize system axiom
         String axiom = input.getString("axiom");
         system.setAxiom(axiom);
@@ -191,12 +191,15 @@ public class LSystem extends AbstractLSystem{
         //Initialize system rules
         JSONObject rules = input.getJSONObject("rules");
         for (char key : system.alphabet.keySet()) {
-            Symbol symbol = system.alphabet.get(key);
-            JSONArray rulesArray = rules.getJSONArray(String.valueOf(key));
-            if(rulesArray != null) {
-                for (int i = 0; i < rulesArray.length(); i++) {
-                    String rule = rulesArray.getString(i);
-                    system.addRule(symbol, rule);
+            char verifInAlphabet = rules.keys().next().charAt(0);
+            if(key == verifInAlphabet) {
+                Symbol symbol = new Symbol(verifInAlphabet);
+                JSONArray rulesArray = rules.getJSONArray(String.valueOf(key));
+                if (rulesArray != null) {
+                    for (int i = 0; i < rulesArray.length(); i++) {
+                        String rule = rulesArray.getString(i);
+                        system.addRule(symbol, rule);
+                    }
                 }
             }
         }
