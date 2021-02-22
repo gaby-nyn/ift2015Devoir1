@@ -5,10 +5,13 @@ import java.util.*;
 public class Sequence implements Symbol.Seq {
 
     private List<String> sequences;
+    private Map<Character, Symbol> alphabet;
 
-    public Sequence(String sequence){
+    public Sequence(String sequence, Map<Character, Symbol> alphabet){
         this.sequences = new LinkedList<>();
+        this.alphabet = new HashMap<>();
         this.sequences.add(sequence);
+        this.alphabet = alphabet;
     }
 
     @Override
@@ -24,7 +27,7 @@ public class Sequence implements Symbol.Seq {
         for(String s : sequences) {
             symbolsInSequence = s.toCharArray();
             for(int i = 0; i < s.length(); i++) {
-                listeSequence.add(new Symbol(symbolsInSequence[i]));
+                listeSequence.add(alphabet.get(symbolsInSequence[i]));
             }
         }
 
@@ -32,10 +35,12 @@ public class Sequence implements Symbol.Seq {
         return iterator;
     }
 
+    @Override
     public List<String> getSequenceList() {
         return this.sequences;
     }
 
+    @Override
     public void addSequence(String sequence) {
         this.sequences.add(sequence);
     }

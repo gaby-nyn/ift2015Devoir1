@@ -40,7 +40,7 @@ public class LSystem extends AbstractLSystem{
     //Méthode pour ajouter une règle associer à un symbole
     @Override
     public void addRule(Symbol sym, String expansion) {
-        Symbol.Seq sequence = new Sequence(expansion);
+        Symbol.Seq sequence = new Sequence(expansion, alphabet);
         List<Symbol.Seq> symbolRule = this.rules.get(sym);
         if(symbolRule == null) {
             symbolRule = new LinkedList<>();
@@ -58,7 +58,7 @@ public class LSystem extends AbstractLSystem{
     //Méthode pour définir axiome
     @Override
     public void setAxiom(String str) {
-        this.axiom = new Sequence(str);
+        this.axiom = new Sequence(str, alphabet);
     }
 
     //Méthode qui retourne valeur d'axiome
@@ -70,14 +70,14 @@ public class LSystem extends AbstractLSystem{
     //Méthode qui retourne règle aléatoire
     @Override
     public Symbol.Seq rewrite(Symbol sym) {
-        List<Symbol.Seq> symbolRule = this.rules.get(sym);
-        int indexRandomRule = (int) (Math.random() * (symbolRule.size()-1));
+        List<Symbol.Seq> symbolRule = rules.get(sym);
         if(symbolRule == null) {
             return null;
         }
         else if (symbolRule.size() == 1) {
             return symbolRule.get(0);
         }
+        int indexRandomRule = (int) (Math.random() * (symbolRule.size()-1));
         return symbolRule.get(indexRandomRule);
     }
 
@@ -111,13 +111,20 @@ public class LSystem extends AbstractLSystem{
     //Method that applies rules to rounds of rewriting
     @Override
     public Symbol.Seq applyRules(Symbol.Seq seq, int n) {
-        Sequence returnedSequence;
-        Iterator<Symbol> iterator = axiom.iterator();
-        returnedSequence = (Sequence) iterateSequence(iterator);
+        Symbol.Seq returnedSequence;
+        Iterator<Symbol> iterator;
         iterator = seq.iterator();
-        for(int i = 0; i < n; i++) {
-            Sequence iteratedSequence = (Sequence) iterateSequence(iterator);
-            for(String s : iteratedSequence.getSequenceList()){
+        returnedSequence = iterateSequence(iterator);
+        if(n > 1) {
+            List<String> toAdd = new ArrayList<>();
+            for(int i = 1; i < n; i++) {
+                Iterator<Symbol> returnedSequenceIterator = returnedSequence.iterator();
+                Symbol.Seq iteratedSequence = iterateSequence(returnedSequenceIterator);
+                for(String s : iteratedSequence.getSequenceList()){
+                    toAdd.add(s);
+                }
+            }
+            for (String s : toAdd) {
                 returnedSequence.addSequence(s);
             }
         }
@@ -126,7 +133,7 @@ public class LSystem extends AbstractLSystem{
 
     @Override
     public Rectangle2D tell(Turtle turtle, Symbol.Seq seq, int rounds) {
-        Sequence sequence;
+        Symbol.Seq sequence;
         Iterator<Symbol> iterator;
         Rectangle2D returnedRectangle;
         TurtleImpl turtleImplemented = (TurtleImpl) turtle;
@@ -138,7 +145,7 @@ public class LSystem extends AbstractLSystem{
 
         //If no rounds of rewriting, just
         if(rounds == 0) {
-            sequence = (Sequence) seq;
+            sequence = seq;
             iterator = sequence.iterator();
             while(iterator.hasNext()) {
                 tell(turtle, iterator.next());
@@ -161,22 +168,23 @@ public class LSystem extends AbstractLSystem{
             returnedRectangle = new Rectangle2D.Double(stateStack.get(0).getPosition().getX(), stateStack.get(0).getPosition().getY(), maxX-minX, maxY-minY);
         }
         else {
-            sequence = (Sequence) applyRules(seq, rounds);
+            sequence = applyRules(seq, 1);
             iterator = sequence.iterator();
             while(iterator.hasNext()) {
                 tell(turtle, iterator.next());
             }
-            returnedRectangle = tell(turtle, seq, rounds-1);
+            returnedRectangle = tell(turtle, sequence, rounds-1);
         }
 
         return returnedRectangle;
     }
 
     //Method that reads JSON file and assigns data where they have to go (INIT)
-    public static LSystem readJsonFile(JSONObject file, Turtle turtle) throws FileNotFoundException {
+    public static LSystem readJsonFile(String file, Turtle turtle) throws FileNotFoundException {
         LSystem system = new LSystem();
-        //JSONObject input = new JSONObject(new JSONTokener(FileReader(file)));
-        JSONObject input = file;
+        FileReader fileReader = new FileReader(file);
+        JSONObject input = new JSONObject(new JSONTokener(fileReader));
+
         //Initialize system axiom
         String axiom = input.getString("axiom");
         system.setAxiom(axiom);
@@ -193,12 +201,11 @@ public class LSystem extends AbstractLSystem{
         for (char key : system.alphabet.keySet()) {
             char verifInAlphabet = rules.keys().next().charAt(0);
             if(key == verifInAlphabet) {
-                Symbol symbol = new Symbol(verifInAlphabet);
                 JSONArray rulesArray = rules.getJSONArray(String.valueOf(key));
                 if (rulesArray != null) {
                     for (int i = 0; i < rulesArray.length(); i++) {
                         String rule = rulesArray.getString(i);
-                        system.addRule(symbol, rule);
+                        system.addRule(system.alphabet.get(key), rule);
                     }
                 }
             }
@@ -225,23 +232,51 @@ public class LSystem extends AbstractLSystem{
 
     //Method that iterates through iterator given
     public Symbol.Seq iterateSequence(Iterator<Symbol> iterator) {
-        Sequence returnedSequence = null;
+        Symbol.Seq returnedSequence = null;
+        List<String> toAdd = new ArrayList<>();
         while(iterator.hasNext()) {
-            Sequence rewrittenSequence;
-            if(returnedSequence.equals(null)) {
-                if(rewrite(iterator.next()).equals(null)) {
-                    returnedSequence = new Sequence(iterator.next().toString());
+            Symbol symbol = iterator.next();
+            Symbol.Seq rewrittenSequence;
+            if (returnedSequence == null) {
+                returnedSequence = rewrite(symbol);
+                if (returnedSequence == null) {
+                    returnedSequence = new Sequence(symbol.toString(), alphabet);
                 }
-                else {
-                    returnedSequence = (Sequence) rewrite(iterator.next());
+            } else {
+                rewrittenSequence = rewrite(symbol);
+                if (rewrittenSequence == null) {
+                    rewrittenSequence = new Sequence(symbol.toString(), alphabet);
+                }
+                for (String s : rewrittenSequence.getSequenceList()) {
+                    toAdd.add(s);
                 }
             }
-            else {
-                if(rewrite(iterator.next()).equals(null)) {
-                    returnedSequence = new Sequence(iterator.next().toString());
+        }
+        for (String s : toAdd) {
+            returnedSequence.addSequence(s);
+        }
+        return returnedSequence;
+    }
+
+    public Symbol.Seq iterateSequenceABC(Iterator<Symbol> iterator) {
+        Symbol.Seq returnedSequence = null;
+        while(iterator.hasNext()) {
+            Symbol symbol = iterator.next();
+            Symbol.Seq rewrittenSequence;
+            if (returnedSequence == null) {
+                returnedSequence = rewrite(symbol);
+                if (returnedSequence == null) {
+                    returnedSequence = new Sequence(symbol.toString(), alphabet);
                 }
-                else {
-                    rewrittenSequence = (Sequence) rewrite(iterator.next());
+            } else {
+                rewrittenSequence = rewrite(symbol);
+
+
+
+                if (returnedSequence == null) {
+                    returnedSequence = new Sequence(symbol.toString(), alphabet);
+                } else {
+                    rewrittenSequence = (Sequence) rewrite(symbol);
                     for(String s : rewrittenSequence.getSequenceList()){
                         returnedSequence.addSequence(s);
                     }
