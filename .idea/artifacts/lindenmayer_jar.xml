@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="lindenmayer:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/lindenmayer_jar</output-path>
+    <root id="archive" name="lindenmayer.jar">
+      <element id="module-output" name="DevoirIFT2015" />
+      <element id="extracted-dir" path="$USER_HOME$/Downloads/json-20201115.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

@@ -23,5 +23,7 @@ public class Symbol {
 
         @Override
         Iterator<Symbol> iterator();
+        List<String> getSequenceList();
+        void addSequence(String sequence);
     }
 }

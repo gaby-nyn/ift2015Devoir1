@@ -4,10 +4,14 @@ import java.util.*;
 
 public class Sequence implements Symbol.Seq {
 
-    private String sequence;
+    private List<String> sequences;
+    private Map<Character, Symbol> alphabet;
 
-    public Sequence(String sequence){
-        this.sequence = sequence;
+    public Sequence(String sequence, Map<Character, Symbol> alphabet){
+        this.sequences = new LinkedList<>();
+        this.alphabet = new HashMap<>();
+        this.sequences.add(sequence);
+        this.alphabet = alphabet;
     }
 
     @Override
@@ -17,16 +21,28 @@ public class Sequence implements Symbol.Seq {
         char[] symbolsInSequence;
         Iterator<Symbol> iterator;
 
-        if(sequence.isEmpty()) {
+        if(sequences.isEmpty()) {
             return null;
         }
-
-        for(int i = 0; i < sequence.length(); i++) {
-            symbolsInSequence = sequence.toCharArray();
-            listeSequence.add(new Symbol(symbolsInSequence[i]));
+        for(String s : sequences) {
+            symbolsInSequence = s.toCharArray();
+            for(int i = 0; i < s.length(); i++) {
+                listeSequence.add(alphabet.get(symbolsInSequence[i]));
+            }
         }
+
         iterator = listeSequence.iterator();
         return iterator;
+    }
+
+    @Override
+    public List<String> getSequenceList() {
+        return this.sequences;
+    }
+
+    @Override
+    public void addSequence(String sequence) {
+        this.sequences.add(sequence);
     }
 
 }
