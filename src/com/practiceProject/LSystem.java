@@ -257,32 +257,4 @@ public class LSystem extends AbstractLSystem{
         }
         return returnedSequence;
     }
-
-    public Symbol.Seq iterateSequenceABC(Iterator<Symbol> iterator) {
-        Symbol.Seq returnedSequence = null;
-        while(iterator.hasNext()) {
-            Symbol symbol = iterator.next();
-            Symbol.Seq rewrittenSequence;
-            if (returnedSequence == null) {
-                returnedSequence = rewrite(symbol);
-                if (returnedSequence == null) {
-                    returnedSequence = new Sequence(symbol.toString(), alphabet);
-                }
-            } else {
-                rewrittenSequence = rewrite(symbol);
-
-
-
-                if (returnedSequence == null) {
-                    returnedSequence = new Sequence(symbol.toString(), alphabet);
-                } else {
-                    rewrittenSequence = (Sequence) rewrite(symbol);
-                    for(String s : rewrittenSequence.getSequenceList()){
-                        returnedSequence.addSequence(s);
-                    }
-                }
-            }
-        }
-        return returnedSequence;
-    }
 }
