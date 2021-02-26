@@ -4,6 +4,7 @@
     <root id="archive" name="lindenmayer.jar">
       <element id="module-output" name="DevoirIFT2015" />
       <element id="extracted-dir" path="$USER_HOME$/Downloads/json-20201115.jar" path-in-jar="/" />
+      <element id="module-source" name="DevoirIFT2015" />
     </root>
   </artifact>
 </component>
